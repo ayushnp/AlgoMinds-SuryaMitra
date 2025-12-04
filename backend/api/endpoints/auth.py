@@ -8,6 +8,8 @@ from core.security import get_password_hash, verify_password, create_access_toke
 from core.config import settings
 from models.user import UserCreate, UserOut
 from api.dependencies import DBSession
+# Add import for ObjectId which is used in the database query
+from bson import ObjectId
 
 router = APIRouter()
 
@@ -31,6 +33,7 @@ async def register_user(
         )
 
     # Hash the password
+    # NOTE: Password truncation must be handled inside get_password_hash
     hashed_password = get_password_hash(user_in.password)
 
     # Create the user document
@@ -48,8 +51,9 @@ async def register_user(
     # Fetch the inserted document to return the Pydantic model
     new_user = await users_collection.find_one({"_id": insert_result.inserted_id})
 
-    # Use UserOut for response structure
-    return UserOut(**new_user)
+    # FIX: Use Pydantic V2's model_validate with from_attributes=True
+    # to correctly convert the MongoDB ObjectId to a string.
+    return UserOut.model_validate(new_user, from_attributes=True)
 
 
 @router.post("/token")
