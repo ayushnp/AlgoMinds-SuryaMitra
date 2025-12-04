@@ -7,8 +7,8 @@ from pathlib import Path
 
 from ultralytics import YOLO
 
-from ..core.config import settings
-from ..models.application import MetricScore, SatelliteAnalysisResult
+from core.config import settings
+from models.application import MetricScore, SatelliteAnalysisResult
 
 # Initialize YOLO model (Load once globally for efficiency)
 # NOTE: Replace 'yolov8n.pt' with your trained solar panel detection model.

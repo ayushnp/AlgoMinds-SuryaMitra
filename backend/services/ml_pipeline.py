@@ -2,13 +2,13 @@ import httpx
 from bson import ObjectId
 from typing import Dict, Any
 
-from ..core.database import get_application_collection, get_user_collection
-from ..core.config import settings
-from ..models.application import ApplicationModel, VerificationReport, MetricScore, EnergyPrediction
-from ..services.photo_forensics import gps_check, shadow_analysis_check
-from ..services.satellite_analysis import satellite_verification
-from ..services.equipment_check import equipment_verification
-from ..services.notification import send_expo_push_notification
+from core.database import get_application_collection, get_user_collection
+from core.config import settings
+from models.application import ApplicationModel, VerificationReport, MetricScore, EnergyPrediction
+from services.photo_forensics import gps_check, shadow_analysis_check
+from services.satellite_analysis import satellite_verification
+from services.equipment_check import equipment_verification
+from services.notification import send_expo_push_notification
 
 PVWATTS_API_URL = "https://developer.nrel.gov/api/pvwatts/v8.json"
 

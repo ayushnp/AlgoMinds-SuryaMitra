@@ -3,11 +3,11 @@ from fastapi.security import OAuth2PasswordRequestForm
 from datetime import timedelta
 from typing import Annotated
 
-from ...core.database import get_user_collection
-from ...core.security import get_password_hash, verify_password, create_access_token
-from ...core.config import settings
-from ...models.user import UserCreate, UserOut
-from ...api.dependencies import DBSession
+from core.database import get_user_collection
+from core.security import get_password_hash, verify_password, create_access_token
+from core.config import settings
+from models.user import UserCreate, UserOut
+from api.dependencies import DBSession
 
 router = APIRouter()
 

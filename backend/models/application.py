@@ -1,6 +1,8 @@
 from typing import List, Optional, Dict
+
+from bson import ObjectId
 from pydantic import BaseModel, Field, conint, confloat
-from backend.models.user import PyObjectId  # Import custom ObjectId
+from models.user import PyObjectId  # Import custom ObjectId
 
 
 # --- Sub-Models for Verification Report ---

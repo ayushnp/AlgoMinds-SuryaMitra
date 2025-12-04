@@ -4,15 +4,17 @@ from typing import Annotated
 
 from fastapi import APIRouter, HTTPException, status, Depends, BackgroundTasks, Form, UploadFile
 from motor.motor_asyncio import AsyncIOMotorClient
-from bson import ObjectId
+from bson import ObjectId # Import ObjectId for string conversion in queries
 
-from ...core.database import get_application_collection
-from ...core.config import settings
-from ...api.dependencies import DBSession, CurrentUser
-from ...models.user import UserModel
-from ...models.application import ApplicationModel, ApplicationCreate
-from ...services.ml_pipeline import run_verification_pipeline
-from ...services.storage import save_uploaded_files, get_storage_path  # We'll implement services later
+# --- CORE IMPORTS ---
+# Note: Redundant 'from bson import ObjectId' before router has been removed.
+from core.database import get_application_collection
+from core.config import settings
+from api.dependencies import DBSession, CurrentUser
+from models.user import UserModel, PyObjectId # PyObjectId is needed here for typing and context
+from models.application import ApplicationModel, ApplicationCreate
+from services.ml_pipeline import run_verification_pipeline
+from services.storage import save_uploaded_files, get_storage_path
 
 router = APIRouter()
 
@@ -79,7 +81,8 @@ async def submit_application(
 
     # 3. Create the Database Document (Initial State)
     app_doc = {
-        "user_id": current_user.id,  # Use PyObjectId here
+        # current_user.id is already the correct BSON type for insertion
+        "user_id": current_user.id,
         "address": address,
         "registered_lat": registered_lat,
         "registered_lon": registered_lon,
@@ -97,11 +100,10 @@ async def submit_application(
     app_id = str(insert_result.inserted_id)
 
     # 4. 🚀 Trigger Asynchronous Verification Pipeline
-    # This task will run after the HTTP response is sent.
     background_tasks.add_task(
         run_verification_pipeline,
         app_id,
-        app_doc,  # Pass the document structure including file keys
+        app_doc,
         current_user.email
     )
 
@@ -111,7 +113,7 @@ async def submit_application(
     }
 
 
-# --- Optional: Endpoint to retrieve application status/report ---
+# --- Endpoint to retrieve application status/report ---
 
 @router.get("/{application_id}", response_model=ApplicationModel)
 async def get_application_details(
@@ -131,6 +133,7 @@ async def get_application_details(
 
     # Query by ID and ensure it belongs to the current user
     app_doc = await app_collection.find_one(
+        # FIX: current_user.id is already the correct type; removed redundant PyObjectId() wrapper.
         {"_id": app_object_id, "user_id": current_user.id}
     )
 

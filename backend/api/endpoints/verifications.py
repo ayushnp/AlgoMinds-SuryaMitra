@@ -2,10 +2,10 @@ from fastapi import APIRouter, HTTPException, status, Depends
 from bson import ObjectId
 from typing import Annotated
 
-from ...core.database import get_application_collection
-from ...api.dependencies import DBSession, CurrentUser
-from ...models.application import ApplicationModel, VerificationReport
-from ...models.user import UserModel  # Used for CurrentUser type hinting
+from core.database import get_application_collection
+from api.dependencies import DBSession, CurrentUser
+from models.application import ApplicationModel, VerificationReport
+from models.user import UserModel  # Used for CurrentUser type hinting
 
 router = APIRouter()
 

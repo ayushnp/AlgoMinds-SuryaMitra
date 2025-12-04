@@ -4,8 +4,8 @@ import cv2
 import numpy as np
 from typing import List, Optional, Tuple
 
-from ..services.storage import get_file_content
-from ..models.application import MetricScore, EquipmentCheckResult
+from services.storage import get_file_content
+from models.application import MetricScore, EquipmentCheckResult
 
 # Initialize EasyOCR reader (Load once globally for efficiency)
 # NOTE: Ensure you have the necessary language models installed.

@@ -8,8 +8,8 @@ import pytz
 from datetime import datetime
 from pvlib import solarposition
 
-from ..services.storage import get_file_content
-from ..models.application import MetricScore, ShadowAnalysisResult
+from services.storage import get_file_content
+from models.application import MetricScore, ShadowAnalysisResult
 
 
 def extract_exif_data(file_content: bytes) -> Dict:

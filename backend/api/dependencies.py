@@ -1,9 +1,9 @@
 from typing import Annotated
 from fastapi import Depends, HTTPException, status
 from motor.motor_asyncio import AsyncIOMotorClient
-from ..core.database import get_database, get_user_collection
-from ..core.security import get_current_user_id
-from ..models.user import UserModel, PyObjectId
+from core.database import get_database, get_user_collection
+from core.security import get_current_user_id
+from models.user import UserModel, PyObjectId
 
 
 # --- Database Dependencies ---
