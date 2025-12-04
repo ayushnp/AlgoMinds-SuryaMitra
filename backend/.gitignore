@@ -1,0 +1,42 @@
+# ----------------------------------------------------------------------
+# GLOBAL IGNORE
+# ----------------------------------------------------------------------
+.DS_Store
+.vscode/
+.idea/
+*.log
+*.sqlite
+/dist
+/build
+
+# ----------------------------------------------------------------------
+# PYTHON & FASTAPI BACKEND IGNORE (backend/)
+# ----------------------------------------------------------------------
+# Python Environment
+venv/
+__pycache__/
+*.pyc
+*.pyd
+*.so
+/htmlcov
+
+# Environment Variables and Secrets
+.env
+.flaskenv
+/config.ini
+
+# Large ML/AI Artifacts
+# These files are typically too large for Git and should be managed via DVC or Git LFS
+# YOLO Model Weights and checkpoint files
+*.pt
+*.onnx
+/runs
+/weights
+
+# OpenCV/Image processing caches
+/temp_cv_cache
+
+# Storage Directory for Uploaded Files
+# This is crucial! Never commit user-uploaded photos/data.
+/backend/storage/
+
