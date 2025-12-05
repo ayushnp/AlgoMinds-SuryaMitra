@@ -61,10 +61,9 @@ class UserModel(BaseModel):
     is_active: bool = True
 
     class Config:
-        # Use V2 standard keys
-        validate_by_name = True       # Replaces allow_population_by_field_name
+        validate_by_name = True
         json_encoders = {ObjectId: str}
-        from_attributes = True        # Replaces orm_mode
+        from_attributes = True
 
 
 class UserCreate(BaseModel):
@@ -89,5 +88,5 @@ class UserOut(BaseModel):
 
     class Config:
         json_encoders = {ObjectId: str}
-        # FIX: from_attributes=True is essential here to convert the MongoDB ObjectId to a string
+        # This is the V2 equivalent of ORM mode, necessary for DB data conversion
         from_attributes = True

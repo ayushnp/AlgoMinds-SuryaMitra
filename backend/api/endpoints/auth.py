@@ -8,7 +8,6 @@ from core.security import get_password_hash, verify_password, create_access_toke
 from core.config import settings
 from models.user import UserCreate, UserOut
 from api.dependencies import DBSession
-# Add import for ObjectId which is used in the database query
 from bson import ObjectId
 
 router = APIRouter()
@@ -32,8 +31,7 @@ async def register_user(
             detail="User with this email already exists"
         )
 
-    # Hash the password
-    # NOTE: Password truncation must be handled inside get_password_hash
+    # Hash the password (Truncation handled in core/security.py)
     hashed_password = get_password_hash(user_in.password)
 
     # Create the user document
@@ -48,11 +46,15 @@ async def register_user(
     # Insert into MongoDB
     insert_result = await users_collection.insert_one(user_doc)
 
-    # Fetch the inserted document to return the Pydantic model
+    # Fetch the inserted document
     new_user = await users_collection.find_one({"_id": insert_result.inserted_id})
 
-    # FIX: Use Pydantic V2's model_validate with from_attributes=True
-    # to correctly convert the MongoDB ObjectId to a string.
+    # FIX: Explicitly convert the ObjectId to a string before validation.
+    # This guarantees the UserOut model receives the string it needs for the 'id' field.
+    if new_user and '_id' in new_user:
+        new_user['_id'] = str(new_user['_id'])
+
+    # Use Pydantic V2's model_validate with from_attributes=True
     return UserOut.model_validate(new_user, from_attributes=True)
 
 
@@ -77,6 +79,7 @@ async def login_for_access_token(
         )
 
     # User authenticated, create token
+    # user_doc["_id"] is ObjectId, str() converts it correctly to a string ID for the JWT 'sub' claim
     user_id = str(user_doc["_id"])
     access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
 
