@@ -1,5 +1,8 @@
 from fastapi import FastAPI
 from contextlib import asynccontextmanager
+
+from starlette.middleware.cors import CORSMiddleware
+
 from core.config import settings
 from core.database import connect_to_mongo, close_mongo_connection
 from api.endpoints import auth, applications, verifications
@@ -34,6 +37,21 @@ app = FastAPI(
         {"name": "auth", "description": "User registration and authentication."},
         {"name": "applications", "description": "Solar subsidy application submission and management."},
     ]
+)
+origins = [
+    "http://localhost",
+    "http://localhost:8081",  # Standard Expo web port
+    "http://127.0.0.1:8081",
+    # Add the specific IP address of your development machine if testing on a physical device over LAN
+    # e.g., "http://192.168.1.10:8081"
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"], # For development, use ["*"]. Replace with 'origins' list for production.
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 # --- Include Routers (API Endpoints) ---
